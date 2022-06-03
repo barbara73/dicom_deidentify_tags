@@ -1,6 +1,7 @@
-import json
-from pathlib import Path
-
+"""
+Conftest
+Fixtures for testing
+"""
 import pytest
 from dicomgenerator.factory import DataElementFactory, CTDatasetFactory
 from pydicom import Dataset
@@ -12,7 +13,6 @@ from src.dicomdeidentifier.deidentify_dicom import LookupID
 @pytest.fixture
 def a_dataset() -> Dataset:
     """Tiny Dataset that can be used with some_rules and a_core_with_some_rules"""
-
     dataset = Dataset()
     dataset.add(DataElementFactory(tag="PatientID", value="12345"))
     dataset.add(DataElementFactory(tag="Modality", value="CT"))
@@ -44,6 +44,7 @@ def datetime_dataset():
 
 @pytest.fixture
 def a_lookup():
+    """Look-up fixture for testing good values."""
     return LookupID(deid_patient_id='a_patient_id',
                     deid_series_uid='2.25.22070338010590029158579357354431',
                     deid_study_uid='1.25.220703380105900291585793573',
@@ -55,19 +56,19 @@ def a_lookup():
 
 @pytest.fixture
 def wrong_type_lookup():
+    """Look-up fixture for testing bad values."""
     return LookupID(deid_patient_id='a_patient_id',
                     deid_series_uid='a_series_uid',
                     deid_study_uid='a_study_uid',
                     deid_sop_uid='a_deidentified_SOP',
-                    time_shift='e',
+                    time_shift=1,
                     filename='a_filename'
                     )
 
+
 @pytest.fixture
 def a_dataset_with_transfer_syntax():
-    """Transfer Syntax is needed for interpreting PixelData. This is not
-    recorded with CTDatasetFactory()
-    """
+    """Transfer Syntax is needed for interpreting PixelData."""
     dataset = CTDatasetFactory()
     dataset.file_meta = Dataset()
     dataset.file_meta.TransferSyntaxUID = ExplicitVRLittleEndian
