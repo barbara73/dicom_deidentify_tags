@@ -1,0 +1,4 @@
+idiscore
+logdecoratorandhandler
+pytest
+jinja2
