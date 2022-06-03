@@ -101,11 +101,12 @@ class DeidentifyDataset:
                             ds.data_element(element).value = new_time.strftime('%Y%m%d')
                         elif len(date.partition('.')[0]) == 14:
                             date = date.partition('.')[0]
-                            new_time = datetime.strptime(date, '%Y%m%d%H%M%S') + timedelta(days=shift)
+                            new_time = datetime.strptime(date, '%Y%m%d%H%M%S') \
+                                       + timedelta(days=shift)
                             ds.data_element(element).value = new_time.strftime('%Y%m%d%H%M%S')
                         else:
                             ds.data_element(element).value = None
-            except TypeError as ex:
+            except TypeError:
                 ds.data_element(element).value = None
         return ds
 
