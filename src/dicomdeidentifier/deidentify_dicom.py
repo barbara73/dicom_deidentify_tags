@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Optional
 from idiscore.core import Core, Profile
-from pydicom.uid import generate_uid
+from pydicom.uid import generate_uid, validate_value
 from pydicom import FileDataset
 from pydicom.dataset import Dataset
 from logdecoratorandhandler.log_decorator import LogDecorator
@@ -58,7 +58,7 @@ class DeidentifyDataset:
     Deidentifier for de-identifying dicom content with basic profile
     and custom dates and UIDs.
     """
-    lookup: LookupID
+    lookup: LookupID = field(default=LookupID())
 
     @staticmethod
     @LogDecorator('INFO - get date elements')
@@ -89,22 +89,24 @@ class DeidentifyDataset:
         shift = self.lookup.time_shift
 
         for element, date in self.get_date_elements(ds).items():
-            if shift in (0, None) or date is None:
-                ds.data_element(element).value = None
-            else:
-                if element == 'PatientBirthDate':
+            try:
+                if shift in (0, None) or date is None:
                     ds.data_element(element).value = None
                 else:
-                    if len(date) == 8:
-                        new_time = datetime.strptime(date, '%Y%m%d') + timedelta(days=shift)
-                        ds.data_element(element).value = new_time.strftime('%Y%m%d')
-                    elif len(date.partition('.')[0]) == 14:
-                        date = date.partition('.')[0]
-                        new_time = datetime.strptime(date, '%Y%m%d%H%M%S') + timedelta(days=shift)
-                        ds.data_element(element).value = new_time.strftime('%Y%m%d%H%M%S')
-                    else:
+                    if element == 'PatientBirthDate':
                         ds.data_element(element).value = None
-
+                    else:
+                        if len(date) == 8:
+                            new_time = datetime.strptime(date, '%Y%m%d') + timedelta(days=shift)
+                            ds.data_element(element).value = new_time.strftime('%Y%m%d')
+                        elif len(date.partition('.')[0]) == 14:
+                            date = date.partition('.')[0]
+                            new_time = datetime.strptime(date, '%Y%m%d%H%M%S') + timedelta(days=shift)
+                            ds.data_element(element).value = new_time.strftime('%Y%m%d%H%M%S')
+                        else:
+                            ds.data_element(element).value = None
+            except TypeError as ex:
+                ds.data_element(element).value = None
         return ds
 
     @LogDecorator("INFO - add de-identified uid's")
@@ -115,20 +117,27 @@ class DeidentifyDataset:
         if self.lookup.deid_patient_id is None:
             ds.PatientID = str(uuid)
         else:
-            ds.PatientID = self.lookup.deid_patient_id
+            ds.PatientID = str(self.lookup.deid_patient_id)
 
         if self.lookup.deid_study_uid is None:
             ds.StudyInstanceUID = str(generate_uid(prefix=None))
         else:
-            ds.StudyInstanceUID = self.lookup.deid_study_uid
+            validate_value('UI', self.lookup.deid_study_uid, 2)
+            ds.StudyInstanceUID = str(self.lookup.deid_study_uid)
 
         if self.lookup.deid_series_uid is None:
             ds.SeriesInstanceUID = str(generate_uid(prefix=None))
         else:
-            ds.SeriesInstanceUID = self.lookup.deid_series_uid
+            validate_value('UI', self.lookup.deid_series_uid, 2)
+            ds.SeriesInstanceUID = str(self.lookup.deid_series_uid)
 
-        ds.SOPInstanceUID = str(generate_uid(prefix=None))
-        self.lookup.deid_sop_uid = ds.SOPInstanceUID
+        if self.lookup.deid_sop_uid is None:
+            ds.SOPInstanceUID = str(generate_uid(prefix=None))
+            self.lookup.deid_sop_uid = ds.SOPInstanceUID
+        else:
+            validate_value('UI', self.lookup.deid_sop_uid, 2)
+            ds.SOPInstanceUID = str(self.lookup.deid_sop_uid)
+
         ds.file_meta.MediaStorageSOPClassUID = ds.SOPInstanceUID
         return ds
 

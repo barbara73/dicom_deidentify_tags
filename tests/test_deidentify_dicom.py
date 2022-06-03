@@ -93,25 +93,73 @@ def test_deidentify_dates_with_wrong_date_length(ds):
     assert deid_ds.AcquisitionDateTime is None
 
 
-@pytest.mark.parametrize("ds", [quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
-                                              StudyInstanceUID="1.2.33333333333",
-                                              SeriesInstanceUID="1.3.44444444444",
-                                              ),
-                                quick_dataset(SeriesDescription="Annotation"),  # Missing SOPClassUID
-                                quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
-                                              StudyInstanceUID="not_annotation",
-                                              ),  # Wrong description
-                                ],
+def test_deidentify_dates_with_wrong_time_shift_type(datetime_dataset):
+    """Test returns None if wrong date or datetime length."""
+    lookup = LookupID(time_shift='e')
+    deid_ds = DeidentifyDataset(lookup).deidentify_dates(datetime_dataset)
+    assert deid_ds.data_element('SeriesDate').value is None
+    assert deid_ds.AcquisitionDateTime is None
+
+
+@pytest.mark.parametrize("ds",
+                         [quick_dataset(SOPClassUID='1.2.840.10008.5.1.4.1.1.11.1',
+                                        StudyInstanceUID='2.25.22070338010590029158579',
+                                        SeriesInstanceUID='2.25.22070338010590029158579'),
+                          quick_dataset(PatientID=1),
+                          quick_dataset(SeriesDescription="Annotation"),
+                          quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
+                                        StudyInstanceUID="not_annotation"),
+                          ],
                          )
 def test_add_deid_uids(a_lookup, ds):
-    """Test add deidentified uids are cok."""
+    """Test add deidentified uids are ok."""
     ds.file_meta = Dataset()
     ds.file_meta.MediaStorageSOPInstanceUID = 'a_UID'
     ds_uid = DeidentifyDataset(a_lookup).add_deid_uids(ds)
-    assert ds_uid.StudyInstanceUID == '456'
-    assert ds_uid.SeriesInstanceUID == '123'
+    assert ds_uid.PatientID == 'a_patient_id'
+    assert ds_uid.StudyInstanceUID == '1.25.220703380105900291585793573'
+    assert ds_uid.SeriesInstanceUID == '2.25.22070338010590029158579357354431'
     assert ds_uid.SOPInstanceUID != '1.2.840.10008.5.1.4.1.1.11.1'
     assert ds_uid.SOPInstanceUID == a_lookup.deid_sop_uid
+
+
+@pytest.mark.parametrize("ds",
+                         [quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
+                                        StudyInstanceUID="1.2.33333333333",
+                                        SeriesInstanceUID="1.3.44444444444"),
+                          quick_dataset(PatientID=1),
+                          quick_dataset(SeriesDescription="Annotation"),
+                          quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
+                                        StudyInstanceUID="not_annotation"),
+                          ],
+                         )
+def test_add_deid_uids_with_wrong_types_throw_error(wrong_type_lookup, ds):
+    """Test add deidentified uids are ok."""
+    ds.file_meta = Dataset()
+    ds.file_meta.MediaStorageSOPInstanceUID = 'a_UID'
+
+    with pytest.raises(ValueError):
+        DeidentifyDataset(wrong_type_lookup).add_deid_uids(ds)
+
+
+@pytest.mark.parametrize("ds",
+                         [quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
+                                        StudyInstanceUID="1.2.33333333333",
+                                        SeriesInstanceUID="1.3.44444444444"),
+                          quick_dataset(PatientID=1),
+                          quick_dataset(SeriesDescription="Annotation"),
+                          quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
+                                        StudyInstanceUID="not_annotation"),
+                          ],
+                         )
+def test_add_deid_uids_if_no_lookup(ds):
+    ds.file_meta = Dataset()
+    ds.file_meta.MediaStorageSOPInstanceUID = 'a_UID'
+    ds_uid = DeidentifyDataset().add_deid_uids(ds)
+    assert ds_uid.PatientID is not None
+    assert ds_uid.SOPInstanceUID is not None
+    assert ds_uid.SeriesInstanceUID is not None
+    assert ds_uid.StudyInstanceUID is not None
 
 
 def test_get_deid_dataset_good(datetime_dataset, a_lookup):

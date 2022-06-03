@@ -44,13 +44,24 @@ def datetime_dataset():
 
 @pytest.fixture
 def a_lookup():
-    return LookupID(deid_series_uid='123',
-                    deid_study_uid='456',
-                    deid_sop_uid='a_deidentified_SOP',
+    return LookupID(deid_patient_id='a_patient_id',
+                    deid_series_uid='2.25.22070338010590029158579357354431',
+                    deid_study_uid='1.25.220703380105900291585793573',
+                    deid_sop_uid='2.25.22070338010522222222222',
                     time_shift=1,
                     filename='a_filename'
                     )
 
+
+@pytest.fixture
+def wrong_type_lookup():
+    return LookupID(deid_patient_id='a_patient_id',
+                    deid_series_uid='a_series_uid',
+                    deid_study_uid='a_study_uid',
+                    deid_sop_uid='a_deidentified_SOP',
+                    time_shift='e',
+                    filename='a_filename'
+                    )
 
 @pytest.fixture
 def a_dataset_with_transfer_syntax():
