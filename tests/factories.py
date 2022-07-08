@@ -19,6 +19,7 @@ def quick_dataset(*_, **kwargs) -> Dataset:
         If any input key is not a valid DICOM keyword
     """
     dataset = Dataset()
-    for tagname, _ in kwargs.items():
+    for tagname, value in kwargs.items():
         Tag(tagname)  # assert valid dicom keyword. pydicom will not do this.
+        dataset.__setattr__(tagname, value)
     return dataset

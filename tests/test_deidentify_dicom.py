@@ -1,5 +1,5 @@
 """
-Test Deidentify dicom data module
+Test De-identify dicom data module
 """
 import pytest
 from pydicom import Dataset
@@ -70,7 +70,7 @@ def test_deidentify_dates_with_positive_timeshift(datetime_dataset):
 
 
 def test_deidentify_dates_with_negative_timeshift(datetime_dataset):
-    """Test deidentify dates without dateshift. Same string will be returned."""
+    """Test deidentify dates without date shift. Same string will be returned."""
     lookup = LookupID(time_shift=-30)
     deid_ds = DeidentifyDataset(lookup).deidentify_dates(datetime_dataset)
     assert deid_ds.data_element('SeriesDate').value == '19730726121212'
@@ -102,17 +102,17 @@ def test_deidentify_dates_with_wrong_time_shift_type(datetime_dataset):
 
 
 @pytest.mark.parametrize("ds",
-                         [quick_dataset(SOPClassUID='1.2.840.10008.5.1.4.1.1.11.1',
+                         [quick_dataset(SOPInstanceUID='1.2.840.10008.5.1.4.1.1.11.1',
                                         StudyInstanceUID='2.25.22070338010590029158579',
                                         SeriesInstanceUID='2.25.22070338010590029158579'),
                           quick_dataset(PatientID=1),
                           quick_dataset(SeriesDescription="Annotation"),
-                          quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
+                          quick_dataset(SOPInstanceUID="1.2.840.10008.5.1.4.1.1.11.1",
                                         StudyInstanceUID="not_annotation"),
                           ],
                          )
 def test_add_deid_uids(a_lookup, ds):
-    """Test add deidentified uids are ok."""
+    """Test add de-identified uids are ok."""
     ds.file_meta = Dataset()
     ds.file_meta.MediaStorageSOPInstanceUID = 'a_UID'
     ds_uid = DeidentifyDataset(a_lookup).add_deid_uids(ds)
@@ -134,7 +134,7 @@ def test_add_deid_uids(a_lookup, ds):
                           ],
                          )
 def test_add_deid_uids_with_wrong_types_throw_error(wrong_type_lookup, ds):
-    """Test add deidentified uids are ok."""
+    """Test add de-identified uids are ok."""
     ds.file_meta = Dataset()
     ds.file_meta.MediaStorageSOPInstanceUID = 'a_UID'
 
@@ -163,15 +163,15 @@ def test_add_deid_uids_if_no_lookup(ds):
 
 
 def test_get_deid_dataset_good(datetime_dataset, a_lookup):
-    """Test get deidentified file data set."""
+    """Test get de-identified file data set."""
     datetime_dataset.file_meta = Dataset()
     datetime_dataset.preamble = 'b'
     datetime_dataset.file_meta.MediaStorageSOPInstanceUID = 'a_UID'
     file_ds, lookup = DeidentifyDataset(a_lookup).get_deid_dataset(datetime_dataset)
     assert lookup.deid_sop_uid is not None
-    assert file_ds.file_meta.MediaStorageSOPClassUID is not None
+    assert file_ds.file_meta.MediaStorageSOPInstanceUID is not None
     assert file_ds.SOPInstanceUID == lookup.deid_sop_uid
-    assert file_ds.file_meta.MediaStorageSOPClassUID == lookup.deid_sop_uid
+    assert file_ds.file_meta.MediaStorageSOPInstanceUID == lookup.deid_sop_uid
     assert file_ds.SeriesDate == '19730826121212'
     assert file_ds.AcquisitionTime == '163601'
 
@@ -198,7 +198,7 @@ def test_quick_dataset():
     assert test.StudyDescription == "Test"
 
     with pytest.raises(ValueError):
-        quick_dataset(unknown_tag="shouldfail")
+        quick_dataset(unknown_tag="should fail")
 
 
 def test_set_new_data_element_by_name():

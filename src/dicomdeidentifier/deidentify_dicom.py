@@ -1,5 +1,5 @@
 """
-Deidentifier:
+De-identifier:
 
 - remove pixel data
 (can be chosen for export with remove_pixel_data=True in config.ini)
@@ -17,7 +17,6 @@ from idiscore.core import Core, Profile
 from pydicom.uid import generate_uid, validate_value
 from pydicom import FileDataset
 from pydicom.dataset import Dataset
-from logdecoratorandhandler.log_decorator import LogDecorator
 
 from .rule_sets import timeshift_custom_ruleset, no_times_ruleset
 
@@ -30,7 +29,6 @@ class NoDatesElementFoundError(Exception):
     pass
 
 
-@LogDecorator('INFO - remove pixel data')
 def remove_pixel_data(content: Dataset) -> str:
     """
     Remove pixel data for export with DB. Not yet implemented.
@@ -55,13 +53,12 @@ class LookupID:
 @dataclass
 class DeidentifyDataset:
     """
-    Deidentifier for de-identifying dicom content with basic profile
+    De-identifier for de-identifying dicom content with basic profile
     and custom dates and UIDs.
     """
     lookup: LookupID = field(default=LookupID())
 
     @staticmethod
-    @LogDecorator('INFO - get date elements')
     def get_date_elements(ds: Dataset) -> dict:
         """
         Get all the date data elements of not de-identified dates and make dictionary.
@@ -72,7 +69,6 @@ class DeidentifyDataset:
         except TypeError:
             return {}
 
-    @LogDecorator('INFO - deidentify dates')
     def deidentify_dates(self, ds: Dataset) -> Dataset:
         """
         Deidentify the dates from dictionary which collected all the dates in data elements.
@@ -81,9 +77,10 @@ class DeidentifyDataset:
         If you do not have a time shift, then you get a type error.
         If you have different date time formats, you will get a value error.
 
-        Need to set PatientBirthDate explicitely to None if not removed in rule set.
+        Need to set PatientBirthDate explicitly to None if not removed in rule set.
+        Args:
         :param ds:      A pydicom dataset with date and datetime tags
-                        (already changed/deidentified in a first step)
+                        (already changed/de-identified in a first step)
         :return:        modified dataset (date shift)
         """
         shift = self.lookup.time_shift
@@ -110,10 +107,9 @@ class DeidentifyDataset:
                 ds.data_element(element).value = None
         return ds
 
-    @LogDecorator("INFO - add de-identified uid's")
     def add_deid_uids(self, ds: Dataset) -> Dataset:
         """
-        Add our UIds to deidentified data elements.
+        Add our UIds to de-identified data elements.
         """
         if self.lookup.deid_patient_id is None:
             ds.PatientID = str(uuid)
@@ -139,10 +135,9 @@ class DeidentifyDataset:
             validate_value('UI', self.lookup.deid_sop_uid, 2)
             ds.SOPInstanceUID = str(self.lookup.deid_sop_uid)
 
-        ds.file_meta.MediaStorageSOPClassUID = ds.SOPInstanceUID
+        ds.file_meta.MediaStorageSOPInstanceUID = ds.SOPInstanceUID
         return ds
 
-    @LogDecorator('INFO - get de-identified data set')
     def get_deid_dataset(self, ds: Dataset) -> tuple:
         """
         Deidentify dicom content with specific rules.
@@ -150,28 +145,29 @@ class DeidentifyDataset:
         Timedelta could be set directly in rule set - not done this way - check.
         Later rules overrule previous.
         """
-        deid_content = self.add_deid_uids(ds)            # added deidentified uids to ds
-
         if self.lookup.time_shift in (0, None):
             profile = Profile(
                 rule_sets=[timeshift_custom_ruleset,
-                           no_times_ruleset,            # delete all times
+                           no_times_ruleset,  # delete all times
                            ])
         else:
             profile = Profile(
                 rule_sets=[timeshift_custom_ruleset,
                            ])
 
-        core = Core(profile=profile,            # Create an deidentification core
-                    pixel_processor=None        # here you would add the pixel location
+        core = Core(profile=profile,  # Create an de-identification core
+                    pixel_processor=None  # here you would add the pixel location
                     )
+
+        deid_content = self.add_deid_uids(ds)  # added de-identified uids to ds
+
         try:
-            # deidentification with rule set
+            # de-identification with rule set
             deid_content = core.deidentify(deid_content)
         except AttributeError:
             pass
 
-        deid_content = self.deidentify_dates(deid_content)       # deidentified dates (not times)
+        deid_content = self.deidentify_dates(deid_content)  # de-identified dates (not times)
 
         return FileDataset(self.lookup.filename,
                            deid_content,

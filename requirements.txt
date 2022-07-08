@@ -1,4 +1,5 @@
-idiscore
-logdecoratorandhandler
-pytest
+idiscore~=1.0.1
+pytest~=7.1.2
 jinja2
+pydicom~=2.3.0
+dicomgenerator~=0.4.0

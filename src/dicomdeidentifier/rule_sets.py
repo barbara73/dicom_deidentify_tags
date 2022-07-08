@@ -11,6 +11,10 @@ from idiscore.operators import Remove, Keep, Empty, HashUID, Replace
 timeshift_custom_ruleset = RuleSet(
     name="Time-shift Custom RuleSet (NEMA adapted)",
     rules=[
+        # Rule(SingleTag("00080018"), Replace()),					# SOP Instance UID
+        # Rule(SingleTag("0020000D"), Replace()),					# Study Instance UID
+        # Rule(SingleTag("0020000E"), Replace()),					# Series Instance UID
+        Rule(SingleTag("00081250"), Remove()),					# Related Series Sequence
         Rule(SingleTag("00080050"), Empty()),					# Accession Number
         Rule(SingleTag("00184000"), Remove()),					# Acquisition Comments
         Rule(SingleTag("00400555"), Remove()),			        # Acquisition Context Sequence
@@ -99,7 +103,7 @@ timeshift_custom_ruleset = RuleSet(
         Rule(SingleTag("300A0676"), Remove()),					# Equipment Frame of Reference Description
         Rule(SingleTag("00102160"), Remove()),					# Ethnic Group
         Rule(SingleTag("00404011"), Remove()),					# Expected Completion DateTime
-        Rule(SingleTag("00080058"), HashUID()),					# Failed SOP Instance UID List
+        Rule(SingleTag("00080058"), Remove()),					# Failed SOP Instance UID List
         Rule(SingleTag("0070031A"), HashUID()),					# Fiducial UID
         Rule(SingleTag("00402017"), Empty()),					# Filler Order Number / Imaging Service Request
         Rule(SingleTag("300A0196"), Remove()),					# Fixation Device Description
@@ -297,15 +301,15 @@ timeshift_custom_ruleset = RuleSet(
         Rule(SingleTag("00081120"), Remove()),					# Referenced Patient Sequence
         Rule(SingleTag("00081111"), Remove()),					# Referenced Performed Procedure Step Sequence
         Rule(SingleTag("04000403"), Remove()),					# Referenced SOP Instance MAC Sequence
-        Rule(SingleTag("00081155"), HashUID()),					# Referenced SOP Instance UID
-        Rule(SingleTag("00041511"), HashUID()),					# Referenced SOP Instance UID in File
+        Rule(SingleTag("00081155"), Remove()),					# Referenced SOP Instance UID
+        Rule(SingleTag("00041511"), Remove()),					# Referenced SOP Instance UID in File
         Rule(SingleTag("00081110"), Remove()),					# Referenced Study Sequence
         Rule(SingleTag("00080092"), Remove()),					# Referring Physician's Address
         Rule(SingleTag("00080090"), Empty()),					# Referring Physician's Name
         Rule(SingleTag("00080094"), Remove()),					# Referring Physician's Telephone Numbers
         Rule(SingleTag("00080096"), Remove()),					# Referring Physician Identification Sequence
         Rule(SingleTag("00102152"), Remove()),					# Region of Residence
-        Rule(SingleTag("300600C2"), HashUID()),					# Related Frame of Reference UID
+        Rule(SingleTag("300600C2"), Remove()),					# Related Frame of Reference UID
         Rule(SingleTag("00400275"), Remove()),					# Request Attributes Sequence
         Rule(SingleTag("00321070"), Remove()),					# Requested Contrast Agent
         Rule(SingleTag("00401400"), Remove()),					# Requested Procedure Comments
@@ -313,7 +317,7 @@ timeshift_custom_ruleset = RuleSet(
         Rule(SingleTag("00401001"), Remove()),					# Requested Procedure ID
         Rule(SingleTag("00401005"), Remove()),					# Requested Procedure Location
         Rule(SingleTag("00189937"), Remove()),					# Requested Series Description
-        Rule(SingleTag("00001001"), HashUID()),					# Requested SOP Instance UID
+        Rule(SingleTag("00001001"), Remove()),					# Requested SOP Instance UID
         Rule(SingleTag("00321032"), Remove()),					# Requesting Physician
         Rule(SingleTag("00321033"), Remove()),					# Requesting Service
         Rule(SingleTag("00189185"), Remove()),					# Respiratory Motion Compensation Technique Description
@@ -430,15 +434,14 @@ timeshift_custom_ruleset = RuleSet(
         Rule(SingleTag("00189367"), Replace()),					# X-Ray Source ID
         Rule(SingleTag("00120063"), Keep()),					# DeidentificationMethod
         Rule(SingleTag("00020016"), Remove()),					# SourceApplicationEntityTitle
-        Rule(SingleTag("30060012"), HashUID()),					# RTReferencedStudySequence
+        Rule(SingleTag("30060012"), Remove()),					# RTReferencedStudySequence
         Rule(SingleTag("00189937"), Remove()),					# RequestedSeriesDescription
-        Rule(SingleTag("00081115"), HashUID()),					# ReferencedSeriesSequence
-        Rule(SingleTag("30060014"), HashUID()),				    # RTReferencedSeriesSequence
+        Rule(SingleTag("00081115"), Remove()),					# ReferencedSeriesSequence
+        Rule(SingleTag("30060014"), Remove()),  			    # RTReferencedSeriesSequence
         Rule(SingleTag("00400340"), Remove()),					# PerformedSeriesSequence
         Rule(SingleTag("00400252"), Remove()),					# PerformedProcedureStepStatus
         Rule(SingleTag("00400255"), Remove()),					# PerformedProcedureStepDescription
         Rule(SingleTag("00500020"), Remove()),					# DeviceDescription
-        Rule(SingleTag("00081250"), HashUID()),					# Related Series Sequence Attribute
         Rule(SingleTag("PatientAge"), Empty()),
         Rule(RepeatingGroup("50xx,xxxx"), Remove()),            # Curve data
         Rule(RepeatingGroup("60xx,x000"), Remove()),			# Overlay Comments
