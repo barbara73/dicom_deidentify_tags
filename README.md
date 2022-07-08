@@ -1,4 +1,4 @@
-# USZ De-Identify DICOM
+# De-Identify DICOM
 
 This package is for de-identifying DICOM tags.
 
