@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dicomdeidentifier"
-version = "0.1.3"
+version = "0.1.4"
 description = "Deidentifies Dicom tags"
 authors = ["barbara73 <barbara.jesacher@gmail.com>"]
 license = "MIT"
