@@ -112,7 +112,7 @@ class DeidentifyDataset:
         Add our UIds to de-identified data elements.
         """
         if self.lookup.deid_patient_id is None:
-            ds.PatientID = str(uuid)
+            ds.PatientID = str(uuid.uuid4())
         else:
             ds.PatientID = str(self.lookup.deid_patient_id)
 
