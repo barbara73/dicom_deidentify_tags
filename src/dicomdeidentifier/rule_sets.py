@@ -11,24 +11,24 @@ from idiscore.operators import Remove, Keep, Empty, Replace
 timeshift_custom_ruleset = RuleSet(
     name="Time-shift Custom RuleSet (NEMA adapted)",
     rules=[
-        Rule(SingleTag("00080050"), Empty()),                                                     # Accession Number
-        Rule(SingleTag("00184000"), Remove()),                                                  # Acquisition Comments
-        Rule(SingleTag("00400555"), Remove()),                                   # Acquisition Context Sequence
-        Rule(SingleTag("00181400"), Remove()),                                   # Acquisition Device Processing Description
-        Rule(SingleTag("001811BB"), Replace()),                                                  # Acquisition Field Of View Label
-        Rule(SingleTag("00189424"), Remove()),                                                  # Acquisition Protocol Description
-        Rule(SingleTag("00404035"), Remove()),                                                  # Actual Human Performers Sequence
-        Rule(SingleTag("001021B0"), Remove()),                                                  # Additional Patient History
-        Rule(SingleTag("0040A353"), Remove()),                                                  # Address (Trial)
-        Rule(SingleTag("00380010"), Remove()),                                                  # Admission ID
-        Rule(SingleTag("00380020"), Remove()),                                                  # Admitting Date
-        Rule(SingleTag("00081084"), Remove()),                                                  # Admitting Diagnoses Code Sequence
-        Rule(SingleTag("00081080"), Remove()),                                                  # Admitting Diagnoses Description
-        Rule(SingleTag("00380021"), Remove()),                                                  # Admitting Time
-        Rule(SingleTag("00001000"), Remove()),                                                  # Affected SOP Instance UID
-        Rule(SingleTag("00102110"), Remove()),                                                  # Allergies
-        Rule(SingleTag("40000010"), Remove()),                                                  # Arbitrary
-        Rule(SingleTag("0040A078"), Remove()),                                                  # Author Observer Sequence
+Rule(SingleTag("00080050"), Empty()),                   # Accession Number
+        Rule(SingleTag("00184000"), Remove()),          # Acquisition Comments
+        Rule(SingleTag("00400555"), Remove()),          # Acquisition Context Sequence
+        Rule(SingleTag("00181400"), Remove()),          # Acquisition Device Processing Description
+        Rule(SingleTag("001811BB"), Replace()),         # Acquisition Field Of View Label
+        Rule(SingleTag("00189424"), Remove()),          # Acquisition Protocol Description
+        Rule(SingleTag("00404035"), Remove()),          # Actual Human Performers Sequence
+        Rule(SingleTag("001021B0"), Remove()),          # Additional Patient History
+        Rule(SingleTag("0040A353"), Remove()),          # Address (Trial)
+        Rule(SingleTag("00380010"), Remove()),          # Admission ID
+        Rule(SingleTag("00380020"), Remove()),          # Admitting Date
+        Rule(SingleTag("00081084"), Remove()),          # Admitting Diagnoses Code Sequence
+        Rule(SingleTag("00081080"), Remove()),          # Admitting Diagnoses Description
+        Rule(SingleTag("00380021"), Remove()),          # Admitting Time
+        Rule(SingleTag("00001000"), Remove()),          # Affected SOP Instance UID
+        Rule(SingleTag("00102110"), Remove()),          # Allergies
+        Rule(SingleTag("40000010"), Remove()),          # Arbitrary
+        Rule(SingleTag("0040A078"), Remove()),          # Author Observer Sequence
         Rule(SingleTag("22000005"), Remove()),                                   # Barcode Value
         Rule(SingleTag("300A00C3"), Remove()),                                                 # Beam Description
         Rule(SingleTag("300A00DD"), Remove()),                                                 # Bolus Description
@@ -230,14 +230,13 @@ timeshift_custom_ruleset = RuleSet(
         Rule(SingleTag("00100101"), Remove()),                                                  # Patient's Primary Language Code Sequence
         Rule(SingleTag("00100102"), Remove()),                                                  # Patient's Primary Language Modifier Code Sequence
         Rule(SingleTag("001021F0"), Remove()),                                                  # Patient's Religious Preference
-        Rule(SingleTag("00100040"), Empty()),                                                     # Patient's Sex
-        Rule(SingleTag("00102203"), Remove()),                                   # Patient's Sex Neutered
+        Rule(SingleTag("00100040"), Empty()),                    # Patient's Sex
+        Rule(SingleTag("00102203"), Remove()),                                # Patient's Sex Neutered
         Rule(SingleTag("00101020"), Remove()),                  # Patient's Size
         Rule(SingleTag("00102155"), Remove()),                  # Patient's Telecom Information
         Rule(SingleTag("00102154"), Remove()),                  # Patient's Telephone Numbers
         Rule(SingleTag("00101030"), Keep()),                    # Patient's Weight
         Rule(SingleTag("00104000"), Remove()),                  # Patient Comments
-        Rule(SingleTag("00100020"), Empty()),                   # Patient ID
         Rule(SingleTag("300A0650"), Remove()),                 # Patient Setup UID
         Rule(SingleTag("00380500"), Remove()),                                                  # Patient State
         Rule(SingleTag("00401004"), Remove()),                                                  # Patient Transport Arrangements
@@ -445,6 +444,7 @@ timeshift_custom_ruleset = RuleSet(
         Rule(RepeatingGroup("60xx,x000"), Remove()),                             # Overlay Comments
     ],
 )
+
 no_times_ruleset = RuleSet(
     name="Rule set for deleting times",
     rules=[
