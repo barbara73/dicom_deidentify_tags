@@ -144,19 +144,23 @@ class DeidentifyDataset:
         Add rule sets if needed in the rule_sets.
         Timedelta could be set directly in rule set - not done this way - check.
         Later rules overrule previous.
+
+        Add information to tags, that the patient identity is removed and with what method.
         """
         if self.lookup.time_shift in (0, None):
             profile = Profile(
                 rule_sets=[timeshift_custom_ruleset,
                            no_times_ruleset,  # delete all times
                            ])
+            text = ''
         else:
             profile = Profile(
                 rule_sets=[timeshift_custom_ruleset,
                            ])
+            text = '/113107'
 
-        core = Core(profile=profile,  # Create an de-identification core
-                    pixel_processor=None  # here you would add the pixel location
+        core = Core(profile=profile,        # Create an de-identification core
+                    pixel_processor=None    # here you would add the pixel location
                     )
 
         deid_content = self.add_deid_uids(ds)  # added de-identified uids to ds
@@ -169,7 +173,11 @@ class DeidentifyDataset:
 
         deid_content = self.deidentify_dates(deid_content)  # de-identified dates (not times)
 
+        # remove private tags, because they could have identity information
         deid_content.remove_private_tags()
+        deid_content.PatientIdentityRemoved = 'YES'
+        deid_content.DeIdentificationMethod = '{Per DICOM PS 3.15 AnnexE. Details in 0012,0064}'
+        deid_content.DeIdentificationMethodCodeSequence = f'113100{text}'
 
         return FileDataset(self.lookup.filename,
                            deid_content,

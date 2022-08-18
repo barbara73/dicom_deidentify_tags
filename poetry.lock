@@ -68,7 +68,7 @@ doc = ["sphinx", "sphinx-rtd-theme", "sphinxcontrib-spelling"]
 
 [[package]]
 name = "faker"
-version = "14.0.0"
+version = "14.1.0"
 description = "Faker is a Python package that generates fake data for you."
 category = "main"
 optional = false
@@ -79,7 +79,7 @@ python-dateutil = ">=2.4"
 
 [[package]]
 name = "fonttools"
-version = "4.34.4"
+version = "4.36.0"
 description = "Tools to manipulate font files"
 category = "main"
 optional = false
