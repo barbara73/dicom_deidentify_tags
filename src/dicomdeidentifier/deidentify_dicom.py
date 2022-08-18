@@ -169,6 +169,8 @@ class DeidentifyDataset:
 
         deid_content = self.deidentify_dates(deid_content)  # de-identified dates (not times)
 
+        deid_content.remove_private_tags()
+
         return FileDataset(self.lookup.filename,
                            deid_content,
                            ds.preamble,

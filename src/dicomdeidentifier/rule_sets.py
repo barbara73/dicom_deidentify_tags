@@ -11,7 +11,7 @@ from idiscore.operators import Remove, Keep, Empty, Replace
 timeshift_custom_ruleset = RuleSet(
     name="Time-shift Custom RuleSet (NEMA adapted)",
     rules=[
-Rule(SingleTag("00080050"), Empty()),                   # Accession Number
+        Rule(SingleTag("00080050"), Empty()),           # Accession Number
         Rule(SingleTag("00184000"), Remove()),          # Acquisition Comments
         Rule(SingleTag("00400555"), Remove()),          # Acquisition Context Sequence
         Rule(SingleTag("00181400"), Remove()),          # Acquisition Device Processing Description
@@ -29,32 +29,32 @@ Rule(SingleTag("00080050"), Empty()),                   # Accession Number
         Rule(SingleTag("00102110"), Remove()),          # Allergies
         Rule(SingleTag("40000010"), Remove()),          # Arbitrary
         Rule(SingleTag("0040A078"), Remove()),          # Author Observer Sequence
-        Rule(SingleTag("22000005"), Remove()),                                   # Barcode Value
-        Rule(SingleTag("300A00C3"), Remove()),                                                 # Beam Description
-        Rule(SingleTag("300A00DD"), Remove()),                                                 # Bolus Description
-        Rule(SingleTag("00101081"), Remove()),                                                  # Branch of Service
-        Rule(SingleTag("0016004D"), Remove()),                                                  # Camera Owner Name
-        Rule(SingleTag("00181007"), Remove()),                                                  # Cassette ID
-        Rule(SingleTag("00120060"), Empty()),                                                     # Clinical Trial Coordinating Center Name
-        Rule(SingleTag("00120082"), Remove()),                                                  # Clinical Trial Protocol Ethics Committee Approval Number
-        Rule(SingleTag("00120081"), Replace()),                                                   # Clinical Trial Protocol Ethics Committee Name
-        Rule(SingleTag("00120020"), Replace()),                                                  # Clinical Trial Protocol ID
-        Rule(SingleTag("00120021"), Empty()),                                                     # Clinical Trial Protocol Name
-        Rule(SingleTag("00120072"), Remove()),                                                  # Clinical Trial Series Description
-        Rule(SingleTag("00120071"), Remove()),                                                  # Clinical Trial Series ID
-        Rule(SingleTag("00120030"), Empty()),                                                     # Clinical Trial Site ID
-        Rule(SingleTag("00120031"), Empty()),                                                     # Clinical Trial Site Name
-        Rule(SingleTag("00120010"), Replace()),                                                  # Clinical Trial Sponsor Name
-        Rule(SingleTag("00120040"), Replace()),                                                  # Clinical Trial Subject ID
-        Rule(SingleTag("00120042"), Replace()),                                                  # Clinical Trial Subject Reading ID
-        Rule(SingleTag("00120051"), Remove()),                                                  # Clinical Trial Time Point Description
-        Rule(SingleTag("00120050"), Empty()),                                                     # Clinical Trial Time Point ID
-        Rule(SingleTag("00400310"), Remove()),                                                  # Comments on Radiation Dose
-        Rule(SingleTag("00400280"), Remove()),                                                  # Comments on the Performed Procedure Step
-        Rule(SingleTag("300A02EB"), Remove()),                                                 # Compensator Description
-        Rule(SingleTag("00209161"), Remove()),                                                  # Concatenation UID
-        Rule(SingleTag("3010000F"), Empty()),                                                     # Conceptual Volume Combination Description
-        Rule(SingleTag("30100017"), Empty()),                                                     # Conceptual Volume Description
+        Rule(SingleTag("22000005"), Remove()),          # Barcode Value
+        Rule(SingleTag("300A00C3"), Remove()),          # Beam Description
+        Rule(SingleTag("300A00DD"), Remove()),          # Bolus Description
+        Rule(SingleTag("00101081"), Remove()),          # Branch of Service
+        Rule(SingleTag("0016004D"), Remove()),          # Camera Owner Name
+        Rule(SingleTag("00181007"), Remove()),          # Cassette ID
+        Rule(SingleTag("00120060"), Empty()),           # Clinical Trial Coordinating Center Name
+        Rule(SingleTag("00120082"), Remove()),          # Clinical Trial Protocol Ethics Committee Approval Number
+        Rule(SingleTag("00120081"), Replace()),         # Clinical Trial Protocol Ethics Committee Name
+        Rule(SingleTag("00120020"), Replace()),         # Clinical Trial Protocol ID
+        Rule(SingleTag("00120021"), Empty()),           # Clinical Trial Protocol Name
+        Rule(SingleTag("00120072"), Remove()),          # Clinical Trial Series Description
+        Rule(SingleTag("00120071"), Remove()),          # Clinical Trial Series ID
+        Rule(SingleTag("00120030"), Empty()),           # Clinical Trial Site ID
+        Rule(SingleTag("00120031"), Empty()),           # Clinical Trial Site Name
+        Rule(SingleTag("00120010"), Replace()),         # Clinical Trial Sponsor Name
+        Rule(SingleTag("00120040"), Replace()),         # Clinical Trial Subject ID
+        Rule(SingleTag("00120042"), Replace()),         # Clinical Trial Subject Reading ID
+        Rule(SingleTag("00120051"), Remove()),          # Clinical Trial Time Point Description
+        Rule(SingleTag("00120050"), Empty()),           # Clinical Trial Time Point ID
+        Rule(SingleTag("00400310"), Remove()),          # Comments on Radiation Dose
+        Rule(SingleTag("00400280"), Remove()),          # Comments on the Performed Procedure Step
+        Rule(SingleTag("300A02EB"), Remove()),          # Compensator Description
+        Rule(SingleTag("00209161"), Remove()),          # Concatenation UID
+        Rule(SingleTag("3010000F"), Empty()),           # Conceptual Volume Combination Description
+        Rule(SingleTag("30100017"), Empty()),           # Conceptual Volume Description
         Rule(SingleTag("30100006"), Remove()),                                                  # Conceptual Volume UID
         Rule(SingleTag("00403001"), Remove()),                                                  # Confidentiality Constraint on Patient Data Description
         Rule(SingleTag("30100013"), Remove()),                                                  # Constituent Conceptual Volume UID
