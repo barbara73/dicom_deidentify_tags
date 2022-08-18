@@ -176,8 +176,8 @@ class DeidentifyDataset:
         # remove private tags, because they could have identity information
         deid_content.remove_private_tags()
         deid_content.PatientIdentityRemoved = 'YES'
-        deid_content.DeIdentificationMethod = '{Per DICOM PS 3.15 AnnexE. Details in 0012,0064}'
-        deid_content.DeIdentificationMethodCodeSequence = f'113100{text}'
+        deid_content.DeidentificationMethod = '{Per DICOM PS 3.15 AnnexE. Details in 0012,0064}'
+        deid_content.DeidentificationMethodCodeSequence = f'113100{text}'
 
         return FileDataset(self.lookup.filename,
                            deid_content,
