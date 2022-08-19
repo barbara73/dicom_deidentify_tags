@@ -11,6 +11,7 @@ You can add
 - deid_series_id
 - deid_sop_uid
 - time_shift (in days)
+- private_tags
 
 to the look-up. If lookup is empty, all the uids are created. 
 Date and times are then deleted entirely.
