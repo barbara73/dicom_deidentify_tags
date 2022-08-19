@@ -48,6 +48,7 @@ class LookupID:
     deid_series_uid: Optional[str] = field(default=None)
     deid_sop_uid: Optional[str] = field(default=None)
     time_shift: Optional[int] = field(default=None)
+    private_tags: bool = field(default=False)
 
 
 @dataclass
@@ -172,9 +173,15 @@ class DeidentifyDataset:
             pass
 
         deid_content = self.deidentify_dates(deid_content)  # de-identified dates (not times)
+        x = deid_content
 
         # remove private tags, because they could have identity information
         deid_content.remove_private_tags()
+        y = deid_content
+
+        if x is not y:
+            self.lookup.private_tags = True
+
         deid_content.PatientIdentityRemoved = 'YES'
         deid_content.DeidentificationMethod = '{Per DICOM PS 3.15 AnnexE. Details in 0012,0064}'
         deid_content.DeidentificationMethodCodeSequence = f'113100{text}'
