@@ -189,7 +189,8 @@ class DeidentifyDataset:
 
         ds_sq = Dataset()
         ds_sq.CodeValue = '113100'
-        deid_content.DeidentificationMethodCodeSequence[0] = Sequence([ds_sq, ds_1])
+
+        deid_content.DeidentificationMethodCodeSequence = Sequence([ds_sq, ds_1])
 
         return FileDataset(self.lookup.filename,
                            deid_content,
