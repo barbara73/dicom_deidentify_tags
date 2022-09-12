@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 from idiscore.core import Core, Profile
 from pydicom.uid import generate_uid, validate_value
-from pydicom import FileDataset
+from pydicom import FileDataset, Sequence
 from pydicom.dataset import Dataset
 
 from .rule_sets import timeshift_custom_ruleset, no_times_ruleset
@@ -153,12 +153,14 @@ class DeidentifyDataset:
                 rule_sets=[timeshift_custom_ruleset,
                            no_times_ruleset,  # delete all times
                            ])
-            text = ''
+            ds_1 = Dataset()
+            ds_1.CodeValue = ''
         else:
             profile = Profile(
                 rule_sets=[timeshift_custom_ruleset,
                            ])
-            text = '/113107'
+            ds_1 = Dataset()
+            ds_1.CodeValue = '113107'
 
         core = Core(profile=profile,        # Create an de-identification core
                     pixel_processor=None    # here you would add the pixel location
@@ -184,7 +186,10 @@ class DeidentifyDataset:
 
         deid_content.PatientIdentityRemoved = 'YES'
         deid_content.DeidentificationMethod = '{Per DICOM PS 3.15 AnnexE. Details in 0012,0064}'
-        deid_content.DeidentificationMethodCodeSequence = f'113100{text}'
+
+        ds_sq = Dataset()
+        ds_sq.CodeValue = '113100'
+        deid_content.DeidentificationMethodCodeSequence[0] = Sequence([ds_sq, ds_1])
 
         return FileDataset(self.lookup.filename,
                            deid_content,
