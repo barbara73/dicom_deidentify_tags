@@ -153,7 +153,7 @@ class DeidentifyDataset:
                 rule_sets=[timeshift_custom_ruleset,
                            no_times_ruleset,  # delete all times
                            ])
-            ds_1 = None
+            ds_1 = Dataset()
         else:
             profile = Profile(
                 rule_sets=[timeshift_custom_ruleset,
