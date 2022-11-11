@@ -172,6 +172,8 @@ class DeidentifyDataset:
             deid_content = core.deidentify(deid_content)
         except AttributeError:
             pass
+        except ValueError:
+            pass
 
         deid_content = self.deidentify_dates(deid_content)  # de-identified dates (not times)
         x = deid_content
