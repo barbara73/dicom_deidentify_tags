@@ -142,26 +142,6 @@ def test_add_deid_uids_with_wrong_types_throw_error(wrong_type_lookup, ds):
         DeidentifyDataset(wrong_type_lookup).add_deid_uids(ds)
 
 
-@pytest.mark.parametrize("ds",
-                         [quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
-                                        StudyInstanceUID="1.2.33333333333",
-                                        SeriesInstanceUID="1.3.44444444444"),
-                          quick_dataset(PatientID=1),
-                          quick_dataset(SeriesDescription="Annotation"),
-                          quick_dataset(SOPClassUID="1.2.840.10008.5.1.4.1.1.11.1",
-                                        StudyInstanceUID="not_annotation"),
-                          ],
-                         )
-def test_add_deid_uids_if_no_lookup(ds):
-    ds.file_meta = Dataset()
-    ds.file_meta.MediaStorageSOPInstanceUID = 'a_UID'
-    ds_uid = DeidentifyDataset().add_deid_uids(ds)
-    assert ds_uid.PatientID is not None
-    assert ds_uid.SOPInstanceUID is not None
-    assert ds_uid.SeriesInstanceUID is not None
-    assert ds_uid.StudyInstanceUID is not None
-
-
 def test_get_deid_dataset_good(datetime_dataset, a_lookup):
     """Test get de-identified file data set."""
     datetime_dataset.file_meta = Dataset()
