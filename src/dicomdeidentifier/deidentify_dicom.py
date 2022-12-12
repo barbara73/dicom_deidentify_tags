@@ -57,7 +57,7 @@ class DeidentifyDataset:
     De-identifier for de-identifying dicom content with basic profile
     and custom dates and UIDs.
     """
-    lookup: LookupID = field(default=LookupID())
+    lookup: LookupID
 
     @staticmethod
     def get_date_elements(ds: Dataset) -> dict:
